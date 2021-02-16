@@ -35,7 +35,7 @@ process.on('unhandledRejection', error => {
 const cooldowns = new Discord.Collection();
 
 client.once('ready', () => {
-	console.log('Ready!');
+	console.log('Phoenix is now running!');
 });
 
 
