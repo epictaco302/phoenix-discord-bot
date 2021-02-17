@@ -36,7 +36,7 @@ module.exports = {
                 .then(m => m.delete(5000));
         }
 
-        const toBan = message.mentions.members.first() || message.guild.members.get(args[0]);
+        const toBan = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
 
         // No member found
         if (!toBan) {
@@ -94,3 +94,4 @@ module.exports = {
         });
     }
 };
+
