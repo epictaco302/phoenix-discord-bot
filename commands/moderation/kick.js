@@ -1,47 +1,96 @@
-module.exports = {
-	name: 'kick',
-	description: 'Kick a user from the server.',
-	guildOnly: true,
-	permissions: 'KICK_MEMBERS',
-	execute(message, args) {
-		if (!message.mentions.users.size) {
-			return message.reply('You need to tag a user in order to kick them!');
-		}
+const { MessageEmbed } = require("discord.js");
+const { stripIndents } = require("common-tags");
+const { promptMessage } = require("../../functions.js");
 
-const user = message.mentions.users.first();
-    // If we have a user mentioned
-    if (user) {
-      // Now we get the member from the user
-      const member = message.guild.members.resolve(user);
-      // If the member is in the guild
-      if (member) {
-        /**
-         * Kick the member
-         * Make sure you run this on a member, not a user!
-         * There are big differences between a user and a member
-         */
-        member
-          .kick('Optional reason that will display in the audit logs')
-          .then(() => {
-            // We let the message author know we were able to kick the person
-            message.channel.send(`Successfully kicked ${user.tag}`);
-          })
-          .catch(err => {
-            // An error happened
-            // This is generally due to the bot not being able to kick the member,
-            // either due to missing permissions or role hierarchy
-            message.channel.send('I was unable to kick the member');
-            // Log the error
-            console.error(err);
-          });
-      } else {
-        // The mentioned user isn't in this guild
-        message.channel.send("That user isn't in this guild!");
-      }
-      // Otherwise, if no user was mentioned
-    } else {
-      message.channel.send("You didn't mention the user to kick!");
+module.exports = {
+    name: "kick",
+    category: "moderation",
+    description: "Kicks the member",
+    usage: "<id | mention>",
+    run: async (client, message, args) => {
+        const logChannel = message.guild.channels.cache.find(c => c.name === "logs") || message.channel;
+
+        if (message.deletable) message.delete();
+
+        // No args
+        if (!args[0]) {
+            return message.reply("Please provide a person to kick.")
+                .then(m => m.delete(5000));
+        }
+
+        // No reason
+        if (!args[1]) {
+            return message.reply("Please provide a reason to kick.")
+                .then(m => m.delete(5000));
+        }
+
+        // No author permissions
+        if (!message.member.hasPermission("KICK_MEMBERS")) {
+            return message.reply("❌ You do not have permissions to kick members. Please contact a staff member")
+                .then(m => m.delete(5000));
+        }
+
+        // No bot permissions
+        if (!message.guild.me.hasPermission("KICK_MEMBERS")) {
+            return message.reply("❌ I do not have permissions to kick members. Please contact a staff member")
+                .then(m => m.delete(5000));
+        }
+
+        const toKick = message.mentions.members.first() || message.guild.members.get(args[0]);
+
+        // No member found
+        if (!toKick) {
+            return message.reply("Couldn't find that member, try again")
+                .then(m => m.delete(5000));
+        }
+
+        // Can't kick urself
+        if (toKick.id === message.author.id) {
+            return message.reply("You can't kick yourself...")
+                .then(m => m.delete(5000));
+        }
+
+        // Check if the user's kickable
+        if (!toKick.kickable) {
+            return message.reply("I can't kick that person due to role hierarchy, I suppose.")
+                .then(m => m.delete(5000));
+        }
+                
+        const embed = new MessageEmbed()
+            .setColor("#ff0000")
+            .setThumbnail(toKick.user.displayAvatarURL)
+            .setFooter(message.member.displayName, message.author.displayAvatarURL)
+            .setTimestamp()
+            .setDescription(stripIndents`**- Kicked member:** ${toKick} (${toKick.id})
+            **- Kicked by:** ${message.member} (${message.member.id})
+            **- Reason:** ${args.slice(1).join(" ")}`);
+
+        const promptEmbed = new MessageEmbed()
+            .setColor("GREEN")
+            .setAuthor(`This verification becomes invalid after 30s.`)
+            .setDescription(`Do you want to kick ${toKick}?`)
+
+        // Send the message
+        await message.channel.send(promptEmbed).then(async msg => {
+            // Await the reactions and the reaction collector
+            const emoji = await promptMessage(msg, message.author, 30, ["✅", "❌"]);
+
+            // The verification stuffs
+            if (emoji === "✅") {
+                msg.delete();
+
+                toKick.kick(args.slice(1).join(" "))
+                    .catch(err => {
+                        if (err) return message.channel.send(`Well.... the kick didn't work out. Here's the error ${err}`)
+                    });
+
+                logChannel.send(embed);
+            } else if (emoji === "❌") {
+                msg.delete();
+
+                message.reply(`Kick canceled.`)
+                    .then(m => m.delete(10000));
+            }
+        });
     }
-  
-	},
-};  
+};

@@ -1,46 +1,96 @@
+const { MessageEmbed } = require("discord.js");
+const { stripIndents } = require("common-tags");
+const { promptMessage } = require("../../functions.js");
+
 module.exports = {
-	name: 'ban',
-	description: 'Bans a user from the server.',
-	guildOnly: true,
-	permissions: 'BAN_MEMBERS',
-	execute(message, args) {
-		if (!message.mentions.users.size) {
-			return message.reply('You need to tag a user in order to ban them!');
-		}
-    const user = message.mentions.users.first();
-    // If we have a user mentioned
-    if (user) {
-      // Now we get the member from the user
-      const member = message.guild.members.resolve(user);
-      // If the member is in the guild
-      if (member) {
-        /**
-         * Ban the member
-         * Make sure you run this on a member, not a user!
-         * There are big differences between a user and a member
-         * Read more about what ban options there are over at
-         * https://discord.js.org/#/docs/main/master/class/GuildMember?scrollTo=ban
-         */
-        member
-          .ban({
-            reason: 'They were bad!',
-          })
-          .then(() => {
-            // We let the message author know we were able to ban the person
-            message.channel.send(`Successfully banned ${user.tag}`);
-          })
-          .catch(err => {
-            // An error happened
-            // This is generally due to the bot not being able to ban the member,
-            // either due to missing permissions or role hierarchy
-            message.channel.send('I was unable to ban the member');
-            // Log the error
-            console.error(err);
-          });
-      } else {
-        // The mentioned user isn't in this guild
-        message.channel.send("That user isn't in this guild!");
-      }
+    name: "ban",
+    category: "moderation",
+    description: "bans the member",
+    usage: "<id | mention>",
+    run: async (client, message, args) => {
+        const logChannel = message.guild.channels.cache.find(c => c.name === "logs") || message.channel;
+
+        if (message.deletable) message.delete();
+
+        // No args
+        if (!args[0]) {
+            return message.reply("Please provide a person to ban.")
+                .then(m => m.delete(5000));
+        }
+
+        // No reason
+        if (!args[1]) {
+            return message.reply("Please provide a reason to ban.")
+                .then(m => m.delete(5000));
+        }
+
+        // No author permissions
+        if (!message.member.hasPermission("BAN_MEMBERS")) {
+            return message.reply("❌ You do not have permissions to ban members. Please contact a staff member")
+                .then(m => m.delete(5000));
+        
+        }
+        // No bot permissions
+        if (!message.guild.me.hasPermission("BAN_MEMBERS")) {
+            return message.reply("❌ I do not have permissions to ban members. Please contact a staff member")
+                .then(m => m.delete(5000));
+        }
+
+        const toBan = message.mentions.members.first() || message.guild.members.get(args[0]);
+
+        // No member found
+        if (!toBan) {
+            return message.reply("Couldn't find that member, try again")
+                .then(m => m.delete(5000));
+        }
+
+        // Can't ban urself
+        if (toBan.id === message.author.id) {
+            return message.reply("You can't ban yourself...")
+                .then(m => m.delete(5000));
+        }
+
+        // Check if the user's banable
+        if (!toBan.bannable) {
+            return message.reply("I can't ban that person due to role hierarchy, I suppose.")
+                .then(m => m.delete(5000));
+        }
+        
+        const embed = new MessageEmbed()
+            .setColor("#ff0000")
+            .setThumbnail(toBan.user.displayAvatarURL)
+            .setFooter(message.member.displayName, message.author.displayAvatarURL)
+            .setTimestamp()
+            .setDescription(stripIndents`**- baned member:** ${toBan} (${toBan.id})
+            **- baned by:** ${message.member} (${message.member.id})
+            **- Reason:** ${args.slice(1).join(" ")}`);
+
+        const promptEmbed = new MessageEmbed()
+            .setColor("GREEN")
+            .setAuthor(`This verification becomes invalid after 30s.`)
+            .setDescription(`Do you want to ban ${toBan}?`)
+
+        // Send the message
+        await message.channel.send(promptEmbed).then(async msg => {
+            // Await the reactions and the reactioncollector
+            const emoji = await promptMessage(msg, message.author, 30, ["✅", "❌"]);
+
+            // Verification stuffs
+            if (emoji === "✅") {
+                msg.delete();
+
+                toBan.ban(args.slice(1).join(" "))
+                    .catch(err => {
+                        if (err) return message.channel.send(`Well.... the ban didn't work out. Here's the error ${err}`)
+                    });
+
+                logChannel.send(embed);
+            } else if (emoji === "❌") {
+                msg.delete();
+
+                message.reply(`ban canceled.`)
+                    .then(m => m.delete(10000));
+            }
+        });
     }
-  }
 };
