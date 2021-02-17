@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
-app.get('/', (req, res) => res.send('this website is running the phoenix discord bot'));
+app.get('/', (req, res) => res.send('What are you doing here? This site is supposed to be running the Phoenix Discord bot...'));
 
 app.listen(port, () => console.log(`Phoenix Bot is listening at http://localhost:${port}`));
 
