@@ -1,7 +1,7 @@
 module.exports = {
 	name: 'bruh',
 	description: 'bruh',
-	execute(message) {
+	run: async (client, message) => {
 		message.channel.send('moment');
 	},
 };
