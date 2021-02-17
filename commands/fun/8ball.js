@@ -14,15 +14,15 @@ module.exports = {
 		"Outlook good",
 		"Yes",
 		"Signs point to yes",
-    "Ask again later",
-    "Better not tell you now",
-    "Cannot predict now",
-    "Concentrate and ask again",
-    "My reply is no",
-    "My sources say no",
-    "Outlook not so good",
-    "Reply hazy, try again",
-    "Very doubtful"
+    		"Ask again later",
+    		"Better not tell you now",
+    		"Cannot predict now",
+    		"Concentrate and ask again",
+    		"My reply is no",
+    		"My sources say no",
+    		"Outlook not so good",
+    		"Reply hazy, try again",
+    		"Very doubtful"
 
 	];
 
