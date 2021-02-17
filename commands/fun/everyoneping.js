@@ -1,7 +1,7 @@
 module.exports = {
 	name: 'everyoneping',
 	description: 'Pings @everyone',
-	execute(message) {
+	run: async (client, message) => {
   message.channel.send("@everyone hi");
 
   }
