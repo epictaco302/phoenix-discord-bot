@@ -8,7 +8,7 @@ module.exports = {
     run: async (client, message, args) => {
         const user = message.mentions.members.first() - message.guild.members.cache.get(args[0]) || message.guild.members.cache.get(message.author.id);
 
-        request.get('http://quandyfactory.com/insult/json/')
+        request.get('https://evilinsult.com/generate_insult.php?lang=en&type=json')
             .end((err, res) => {
                 if (!err && res.status === 200) {
                     const fancyinsult = res.body;
