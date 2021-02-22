@@ -31,14 +31,14 @@ config({
 client.on("ready", () => {
     console.log(`Hi, ${client.user.username} is now online!`);
 
-        client.user.setPresence({
-        game: { 
-            name: 'my code',
-            type: 'WATCHING'
-        },
-        status: 'online'
-    })
-})
+    client.user.setPresence({
+        status: 'online',
+        activity: {
+            name: "ph!help",
+            type: "WATCHING"
+        }
+    });
+});
 
 client.on("message", async message => {
     const prefix = "ph!";
