@@ -19,7 +19,7 @@ module.exports = {
 function getAll(client, message) {
     const embed = new MessageEmbed()
         .setColor("RANDOM")
-        .setTitle("Phoenix Discord bot, version Beta 1.5. Made by EpicTaco. Commands:")
+        .setTitle("Phoenix Discord bot, version Beta 1.6. Made by EpicTaco. Commands:")
     const commands = (category) => {
         return client.commands
             .filter(cmd => cmd.category === category)
