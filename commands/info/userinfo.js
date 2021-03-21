@@ -1,44 +1,43 @@
-const Discord = require ('discord.js');
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed } = require("discord.js");
+const { stripIndents } = require("common-tags");
+const { getMember, formatDate } = require("../../functions.js");
 
 module.exports = {
-	name: 'userinfo',
-	description: 'Display info about yourself.',
-  category: 'info',
-  run: async(client, message, args) => {
-    let inline = true
-    let resence = true
-    const status = {
-        online: "Online",
-        idle: "Idle",
-        dnd: "Do Not Disturb",
-        offline: "Offline/Invisible",
-      }
-        
-const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.member;
-let target = message.mentions.users.first() || message.author
+    name: "userinfo",
+    aliases: ["who", "user", "info"],
+    description: "Returns user information",
+    usage: "[username | id | mention]",
+    run: (client, message, args) => {
+        const member = getMember(message, args.join(" "));
 
-if (member.user.bot === true) {
-    bot = "Yes";
-  } else {
-    bot = "No";
-  }
+        // Member variables
+        const joined = formatDate(member.joinedAt);
+        const roles = member.roles.cache
+            .filter(r => r.id !== message.guild.id)
+            .map(r => r).join(", ") || 'none';
 
-            let embed = new Discord.MessageEmbed()
-                //.setAuthor(member.user.username)
-                .setThumbnail((target.displayAvatarURL))
-                .setColor("#00ff00")
-                .addField("Full Username", `${member.user.tag}`, inline)
-                .addField("ID", member.user.id, inline)
-                .addField("Nickname", `${member.nickname !== null ? `Nickname: ${member.nickname}` : "None"}`, true)
-                .addField("Bot", `${bot}`,inline, true)
-                .addField("Status", `${status[member.user.presence.status]}`, inline, true)
-                .addField("Playing", `${member.user.presence.game ? `🎮 ${member.user.presence.game.name}` : " Not playing"}`,inline, true)
-                .addField("Joined Discord At", member.user.createdAt)
-                .setFooter(`Information about ${member.user.username}`)
-                .setTimestamp()
-    
-            message.channel.send(embed);
+        // User variables
+        const created = formatDate(member.user.createdAt);
 
+        const embed = new MessageEmbed()
+            .setFooter(member.displayName, member.user.displayAvatarURL)
+            .setThumbnail(member.user.displayAvatarURL)
+            .setColor(member.displayHexColor === '#000000' ? '#ffffff' : member.displayHexColor)
+
+            .addField('Member information:', stripIndents`**- Display name:** ${member.displayName}
+            **- Joined at:** ${joined}
+            **- Roles:** ${roles}`, true)
+
+            .addField('User information:', stripIndents`**- ID:** ${member.user.id}
+            **- Username**: ${member.user.username}
+            **- Tag**: ${member.user.tag}
+            **- Created at**: ${created}`, true)
+            
+            .setTimestamp()
+
+        if (member.user.presence.game) 
+            embed.addField('Currently playing', stripIndents`** Name:** ${member.user.presence.game.name}`);
+
+        message.channel.send(embed);
     }
-   }
+}
