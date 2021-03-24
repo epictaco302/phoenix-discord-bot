@@ -2,11 +2,11 @@ const { MessageEmbed } = require("discord.js");
 const randomPuppy = require("random-puppy");
 
 module.exports = {
-    name: "meme",
-    category: "fun",
-    description: "Sends an epic meme",
+    name: "cursedmeme",
+    category: "memes",
+    description: "Sends a very unholy meme",
     run: async (client, message, args) => {
-        const subReddits = ["dankmemes", "memes", "me_irl"];
+        const subReddits = ["HolUp"];
         const random = subReddits[Math.floor(Math.random() * subReddits.length)];
 
         const img = await randomPuppy(random);
