@@ -12,7 +12,7 @@ const { config } = require("dotenv");
 const fs = require("fs");
 
 const client = new Client({
-    disableEveryone: true
+  disableEveryone: true
 });
 
 client.commands = new Collection();
@@ -21,26 +21,25 @@ client.aliases = new Collection();
 client.categories = fs.readdirSync("./commands/");
 
 config({
-    path: __dirname + "/.env"
+  path: __dirname + "/.env"
 });
 
 ["command"].forEach(handler => {
-    require(`./handlers/${handler}`)(client);
+  require(`./handlers/${handler}`)(client);
 });
 
 client.on("ready", () => {
-    console.log(`Hi, ${client.user.username} is now online!`);
-
+  console.log(`Hi, ${client.user.username} is now online!`);
     client.user.setPresence({
         status: 'online',
         activity: {
-            name: "ph!help",
+            name: "ph!help - version 1.0.1",
             type: "WATCHING"
         }
     });
 });
 
-client.on("message", async message => {
+  client.on("message", async message => {
     const prefix = "ph!";
 
     if (message.author.bot) return;
@@ -50,15 +49,19 @@ client.on("message", async message => {
 
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const cmd = args.shift().toLowerCase();
-    
+
     if (cmd.length === 0) return;
-    
+
     let command = client.commands.get(cmd);
     if (!command) command = client.commands.get(client.aliases.get(cmd));
 
-    if (command) 
-        command.run(client, message, args);
+    if (command)
+      command.run(client, message, args);
+  });
+
+  client.on('shardError', error => {
+	console.error('A websocket connection encountered an error:', error);
 });
 
 // login to Discord with your app's token
-client.login('PUT_TOKEN_HERE);
+client.login('TOKEN_GOES_HERE');
