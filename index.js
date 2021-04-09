@@ -2,9 +2,9 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
-app.get('/', (req, res) => res.send('What are you doing here? This site is supposed to be running the Phoenix Discord bot...'));
+app.get('/', (req, res) => res.send('What are you doing here? This site is supposed to be running TacoBot...'));
 
-app.listen(port, () => console.log(`Phoenix Bot is listening at http://localhost:${port}`));
+app.listen(port, () => console.log(`TacoBot is listening at http://localhost:${port}`));
 
 // bot code
 const { Client, Collection } = require("discord.js");
@@ -33,14 +33,14 @@ client.on("ready", () => {
     client.user.setPresence({
         status: 'online',
         activity: {
-            name: "ph!help - version 1.0.1",
+            name: "tb!help - version 1.1.0",
             type: "WATCHING"
         }
     });
 });
 
   client.on("message", async message => {
-    const prefix = "ph!";
+    const prefix = "tb!";
 
     if (message.author.bot) return;
     if (!message.guild) return;
