@@ -1,2 +1,2 @@
-# phoenix-discord-bot
+# TacoBot
 a bot that does things
