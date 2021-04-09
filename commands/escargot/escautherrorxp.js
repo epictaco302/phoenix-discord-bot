@@ -7,3 +7,5 @@ module.exports = {
     message.channel.send(`Got an error while logging in on Messenger 4.7 and 5+ on Windows XP or Vista? Read this thread: https://forum.nina.bz/thread-13.html`)
     }
   }
+
+// this as well as the other Escargot commands were originially created by Animadoria
