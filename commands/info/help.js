@@ -19,7 +19,7 @@ module.exports = {
 function getAll(client, message) {
   const embed = new MessageEmbed()
     .setColor("RANDOM")
-    .setTitle("Phoenix Bot - Commands:")
+    .setTitle("Commands:")
     .setFooter("TacoBot - version 1.1.0 - Made by EpicTaco")
   const commands = (category) => {
     return client.commands
