@@ -20,7 +20,7 @@ function getAll(client, message) {
   const embed = new MessageEmbed()
     .setColor("RANDOM")
     .setTitle("Phoenix Bot - Commands:")
-    .setFooter("Phoneix - version 1.0.1 - Made by EpicTaco")
+    .setFooter("TacoBot - version 1.1.0 - Made by EpicTaco")
   const commands = (category) => {
     return client.commands
       .filter(cmd => cmd.category === category)
