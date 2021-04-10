@@ -12,7 +12,7 @@ module.exports = {
 	      		.setThumbnail(message.guild.iconURL)
 		      	.addField(':arrow_right: Name', message.guild.name, true)
 		      	.addField(':arrow_right: ID', message.guild.id,   true)
-			      .addField(':arrow_right: Region', message.guild.region.toUpperCase(), true)
+			.addField(':arrow_right: Region', message.guild.region.toUpperCase(), true)
 		      	.addField(':arrow_right: Creation Date', message.guild.createdAt.toDateString(), true)
 	      		.addField(':arrow_right: Owner', message.guild.owner.user.tag, true)
 	      		.addField(':arrow_right: Members', message.guild.memberCount, true)
