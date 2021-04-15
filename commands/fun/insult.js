@@ -1,4 +1,5 @@
 const request = require('superagent');
+const { MessageEmbed } = require('discord.js')
 
 module.exports = {
     name: 'insult',
@@ -12,7 +13,11 @@ module.exports = {
             .end((err, res) => {
                 if (!err && res.status === 200) {
                     const fancyinsult = res.body;
-                    message.channel.send(`${user}, ${fancyinsult.insult}`);
+                    const embed = new MessageEmbed()
+                      .setColor("RANDOM")
+                      .setTitle(`You've been insulted. Ha...`)
+                      .setDescription(`${user}, ${fancyinsult.insult}`)
+                    message.channel.send(embed);
                 } 
                 else {
                     console.log(`REST call failed: ${err}`)
