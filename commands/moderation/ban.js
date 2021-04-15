@@ -44,7 +44,7 @@ module.exports = {
                 .then(m => m.delete(5000));
         }
 
-        // Can't ban urself
+        // Can't ban urself idot
         if (toBan.id === message.author.id) {
             return message.reply("You can't ban yourself...")
                 .then(m => m.delete(5000));
@@ -52,7 +52,7 @@ module.exports = {
 
         // Check if the user's banable
         if (!toBan.bannable) {
-            return message.reply("I can't ban that person due to role hierarchy, I suppose.")
+            return message.reply("I can't ban that person due to role hierarchy, I guess.")
                 .then(m => m.delete(5000));
         }
         
@@ -61,8 +61,8 @@ module.exports = {
             .setThumbnail(toBan.user.displayAvatarURL)
             .setFooter(message.member.displayName, message.author.displayAvatarURL)
             .setTimestamp()
-            .setDescription(stripIndents`**- baned member:** ${toBan} (${toBan.id})
-            **- baned by:** ${message.member} (${message.member.id})
+            .setDescription(stripIndents`**- Banned member:** ${toBan} (${toBan.id})
+            **- Banned by:** ${message.member} (${message.member.id})
             **- Reason:** ${args.slice(1).join(" ")}`);
 
         const promptEmbed = new MessageEmbed()
@@ -80,18 +80,20 @@ module.exports = {
                 msg.delete();
 
                 toBan.ban(args.slice(1).join(" "))
+
+                message.channel.send(`Successfully banned ${toBan}.`)
+                
                     .catch(err => {
-                        if (err) return message.channel.send(`Well.... the ban didn't work out. Here's the error ${err}`)
+                        if (err) return message.channel.send(`Well.... the ban didn't work out. Here's the error details: ${err}`)
                     });
 
                 logChannel.send(embed);
             } else if (emoji === "❌") {
                 msg.delete();
 
-                message.reply(`ban canceled.`)
+                message.reply(`Ban canceled.`)
                     .then(m => m.delete(10000));
             }
         });
     }
 };
-
