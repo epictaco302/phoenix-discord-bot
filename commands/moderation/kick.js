@@ -44,7 +44,7 @@ module.exports = {
                 .then(m => m.delete(5000));
         }
 
-        // Can't kick urself
+        // Can't kick urself idot
         if (toKick.id === message.author.id) {
             return message.reply("You can't kick yourself...")
                 .then(m => m.delete(5000));
@@ -80,6 +80,9 @@ module.exports = {
                 msg.delete();
 
                 toKick.kick(args.slice(1).join(" "))
+                
+                message.channel.send(`Succesfully kicked ${toKick}.`)
+
                     .catch(err => {
                         if (err) return message.channel.send(`Well.... the kick didn't work out. Here's the error ${err}`)
                     });

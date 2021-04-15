@@ -33,7 +33,7 @@ client.on("ready", () => {
     client.user.setPresence({
         status: 'online',
         activity: {
-            name: "tb!help - version 1.1.0",
+            name: "tb!help - version 1.2.0",
             type: "WATCHING"
         }
     });
@@ -64,4 +64,4 @@ client.on("ready", () => {
 });
 
 // login to Discord with your app's token
-client.login('TOKEN_GOES_HERE');
+client.login('PUT_TOKEN_HERE');

@@ -51,6 +51,11 @@ module.exports = {
 	];
 
 	const randomIndex = Math.floor(Math.random() * responses.length);
-	message.channel.send(responses[randomIndex]);
+
+  const embed = new MessageEmbed()
+    .setColor("RANDOM")
+    .setTitle(`"Funny" joke`)
+    .setDescription(responses[randomIndex])
+	message.channel.send(embed);
       }
     };
