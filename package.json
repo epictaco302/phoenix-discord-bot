@@ -25,6 +25,8 @@
     "express": "^4.17.1",
     "moment": "^2.29.1",
     "random-puppy": "^1.1.0",
-    "superagent": "^6.1.0"
+    "superagent": "^6.1.0",
+    "weather-js": "^2.0.0",
+    "weather.js": "^0.1.0"
   }
 }
