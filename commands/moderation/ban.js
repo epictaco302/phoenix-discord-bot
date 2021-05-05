@@ -1,99 +1,42 @@
-const { MessageEmbed } = require("discord.js");
-const { stripIndents } = require("common-tags");
-const { promptMessage } = require("../../functions.js");
+const discord = require("discord.js");
 
 module.exports = {
-    name: "ban",
-    category: "moderation",
-    description: "bans the member",
-    usage: "<id | mention>",
-    run: async (client, message, args) => {
-        const logChannel = message.guild.channels.cache.find(c => c.name === "logs") || message.channel;
-
-        if (message.deletable) message.delete();
-
-        // No args
-        if (!args[0]) {
-            return message.reply("Please provide a person to ban.")
-                .then(m => m.delete(5000));
-        }
-
-        // No reason
-        if (!args[1]) {
-            return message.reply("Please provide a reason to ban.")
-                .then(m => m.delete(5000));
-        }
-
-        // No author permissions
-        if (!message.member.hasPermission("BAN_MEMBERS")) {
-            return message.reply("❌ You do not have permissions to ban members. Please contact a staff member")
-                .then(m => m.delete(5000));
-        
-        }
-        // No bot permissions
-        if (!message.guild.me.hasPermission("BAN_MEMBERS")) {
-            return message.reply("❌ I do not have permissions to ban members. Please contact a staff member")
-                .then(m => m.delete(5000));
-        }
-
-        const toBan = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
-
-        // No member found
-        if (!toBan) {
-            return message.reply("Couldn't find that member, try again")
-                .then(m => m.delete(5000));
-        }
-
-        // Can't ban urself idot
-        if (toBan.id === message.author.id) {
-            return message.reply("You can't ban yourself...")
-                .then(m => m.delete(5000));
-        }
-
-        // Check if the user's banable
-        if (!toBan.bannable) {
-            return message.reply("I can't ban that person due to role hierarchy, I guess.")
-                .then(m => m.delete(5000));
-        }
-        
-        const embed = new MessageEmbed()
-            .setColor("#ff0000")
-            .setThumbnail(toBan.user.displayAvatarURL)
-            .setFooter(message.member.displayName, message.author.displayAvatarURL)
-            .setTimestamp()
-            .setDescription(stripIndents`**- Banned member:** ${toBan} (${toBan.id})
-            **- Banned by:** ${message.member} (${message.member.id})
-            **- Reason:** ${args.slice(1).join(" ")}`);
-
-        const promptEmbed = new MessageEmbed()
-            .setColor("GREEN")
-            .setAuthor(`This verification becomes invalid after 30s.`)
-            .setDescription(`Do you want to ban ${toBan}?`)
-
-        // Send the message
-        await message.channel.send(promptEmbed).then(async msg => {
-            // Await the reactions and the reactioncollector
-            const emoji = await promptMessage(msg, message.author, 30, ["✅", "❌"]);
-
-            // Verification stuffs
-            if (emoji === "✅") {
-                msg.delete();
-
-                toBan.ban(args.slice(1).join(" "))
-
-                message.channel.send(`Successfully banned ${toBan}.`)
-                
-                    .catch(err => {
-                        if (err) return message.channel.send(`Well.... the ban didn't work out. Here's the error details: ${err}`)
-                    });
-
-                logChannel.send(embed);
-            } else if (emoji === "❌") {
-                msg.delete();
-
-                message.reply(`Ban canceled.`)
-                    .then(m => m.delete(10000));
-            }
-        });
+  name: "ban",
+  category: "moderation",
+  description: "Ban a user from the server.",
+  usage: "ban <@user> <reason>",
+  run: async (client, message, args) => {
+    
+    if(!message.member.hasPermission("BAN_MEMBERS")) {
+      return message.channel.send(` **${message.author.username}**,  You don't have permission to ban someone.`)
     }
-};
+    
+    if(!message.guild.me.hasPermission("BAN_MEMBERS")) {
+      return message.channel.send(` **${message.author.username}**, I don't have permission to ban someone.`)
+    }
+    
+    const target = message.mentions.members.first();
+    
+    if(!target) {
+      return message.channel.send(`**${message.author.username}**, Please ping the person that you want to ban.`)
+    }
+    
+    if(target.id === message.author.id) {
+      return message.channel.send(`**${message.author.username}**, ...You can't ban yourself dingus.`)
+    }
+     
+   if(!args[1]) {
+     return message.channel.send(`**${message.author.username}**, Give a reason to ban this member.`)
+   }
+    
+    let embed = new discord.MessageEmbed()
+    .setTitle("Action : Ban")
+    .setDescription(`Banned ${target} (${target.id})`)
+    .setColor("#ff2050")
+    .setThumbnail(target.avatarURL)
+    .setFooter(`Banned by ${message.author.tag}`);
+    
+    message.channel.send(embed)
+    target.ban(args[1])
+  }
+}
