@@ -1,5 +1,6 @@
 const { Client, Collection } = require("discord.js");
 const { config } = require("dotenv");
+const { prefix, token } = require("./config.json");
 const fs = require("fs");
 
 const client = new Client({
@@ -24,14 +25,13 @@ client.on("ready", () => {
     client.user.setPresence({
         status: 'online',
         activity: {
-            name: "tb!help - version 1.2.0",
+            name: "tb!help - version 1.3.0",
             type: "WATCHING"
         }
     });
 });
 
   client.on("message", async message => {
-    const prefix = "tb!";
 
     if (message.author.bot) return;
     if (!message.guild) return;
@@ -55,4 +55,4 @@ client.on("ready", () => {
 });
 
 // login to Discord with your app's token
-client.login('PUT_TOKEN_HERE');
+client.login(token);
