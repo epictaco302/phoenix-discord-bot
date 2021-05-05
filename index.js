@@ -1,12 +1,3 @@
-const express = require('express');
-const app = express();
-const port = 3000;
-
-app.get('/', (req, res) => res.send('What are you doing here? This site is supposed to be running TacoBot...'));
-
-app.listen(port, () => console.log(`TacoBot is listening at http://localhost:${port}`));
-
-// bot code
 const { Client, Collection } = require("discord.js");
 const { config } = require("dotenv");
 const fs = require("fs");
