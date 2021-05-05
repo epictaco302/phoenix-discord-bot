@@ -1,2 +1,2 @@
-# TacoBot (NO LONGER MAINTAINED/UPDATED)
-TacoBot (originially Phoenix) was a Discord bot owned and maintained by EpicTaco. It has been since shutdown due to me leaving the platform. The source code will remain public, but the repository will permanantly be set to read-only.
+# TacoBot
+TacoBot (originially Phoenix) is a Discord bot owned and maintained by EpicTaco. It doesn't have much in terms of features, but if you want to add some, you happily fork the project.
