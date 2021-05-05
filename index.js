@@ -25,7 +25,7 @@ client.on("ready", () => {
     client.user.setPresence({
         status: 'online',
         activity: {
-            name: "tb!help - version 1.2.0",
+            name: "tb!help - version 1.3.0",
             type: "WATCHING"
         }
     });
