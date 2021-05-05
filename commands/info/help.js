@@ -1,58 +1,55 @@
 const { MessageEmbed } = require("discord.js");
-const { stripIndents } = require("common-tags");
 
 module.exports = {
   name: "help",
-  aliases: ["h"],
+  description: "List all the commands of the bot, or details for specific commands",
+  usage: "help <cmd>",
   category: "info",
-  description: "Returns all commands, or one specific command info",
-  usage: "[command | alias]",
   run: async (client, message, args) => {
     if (args[0]) {
-      return getCMD(client, message, args[0]);
+      const command = await client.commands.get(args[0]);
+
+      if (!command) {
+        return message.channel.send("Unknown Command: " + args[0]);
+      }
+
+      let embed = new MessageEmbed()
+        .setAuthor(command.name, client.user.displayAvatarURL())
+        .addField("Description", command.description || "Not provided :(")
+        .setThumbnail(client.user.displayAvatarURL())
+        .setColor("GREEN")
+        .setFooter(client.user.username, client.user.displayAvatarURL());
+
+      return message.channel.send(embed);
     } else {
-      return getAll(client, message);
+      const commands = await client.commands;
+
+      let emx = new MessageEmbed()
+        .setDescription("Command List")
+        .setColor("GREEN")
+        .setFooter(client.user.username, client.user.displayAvatarURL())
+        .setThumbnail(client.user.displayAvatarURL());
+
+      let com = {};
+      for (let comm of commands.array()) {
+        let category = comm.category || "Unknown";
+        let name = comm.name;
+
+        if (!com[category]) {
+          com[category] = [];
+        }
+        com[category].push(name);
+      }
+
+      for(const [key, value] of Object.entries(com)) {
+        let category = key;
+
+        let desc = "`" + value.join("`, `") + "`";
+
+        emx.addField(`${category.toUpperCase()}[${value.length}]`, desc);
+      }
+
+      return message.channel.send(emx);
     }
   }
-}
-
-function getAll(client, message) {
-  const embed = new MessageEmbed()
-    .setColor("RANDOM")
-    .setTitle("Commands:")
-    .setFooter("TacoBot - version 1.2.0 - Made by EpicTaco")
-  const commands = (category) => {
-    return client.commands
-      .filter(cmd => cmd.category === category)
-      .map(cmd => `- \`${cmd.name}\``)
-      .join("\n");
-  }
-
-  const info = client.categories
-    .map(cat => stripIndents`**${cat[0].toUpperCase() + cat.slice(1)}** \n${commands(cat)}`)
-    .reduce((string, category) => string + "\n" + category);
-
-  return message.channel.send(embed.setDescription(info));
-}
-
-function getCMD(client, message, input) {
-  const embed = new MessageEmbed()
-
-  const cmd = client.commands.get(input.toLowerCase()) || client.commands.get(client.aliases.get(input.toLowerCase()));
-
-  let info = `No information found for command **${input.toLowerCase()}**`;
-
-  if (!cmd) {
-    return message.channel.send(embed.setColor("RED").setDescription(info));
-  }
-
-  if (cmd.name) info = `**Command name**: ${cmd.name}`;
-  if (cmd.aliases) info += `\n**Aliases**: ${cmd.aliases.map(a => `\`${a}\``).join(", ")}`;
-  if (cmd.description) info += `\n**Description**: ${cmd.description}`;
-  if (cmd.usage) {
-    info += `\n**Usage**: ${cmd.usage}`;
-    embed.setFooter(`Syntax: <> = required, [] = optional`);
-  }
-
-  return message.channel.send(embed.setColor("GREEN").setDescription(info));
-}
+};
