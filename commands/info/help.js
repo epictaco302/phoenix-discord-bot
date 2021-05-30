@@ -10,24 +10,25 @@ module.exports = {
       const command = await client.commands.get(args[0]);
 
       if (!command) {
-        return message.channel.send(args[0] + " is not a valid command!");
+        return message.channel.send(":x:" + args[0] + " is not a valid command!");
       }
 
       let embed = new MessageEmbed()
         .setAuthor(command.name, client.user.displayAvatarURL())
-        .addField("Description", command.description || "Not provided :(")
+        .addField("Description", command.description || "Not provided.")
+        .addField("Usage", "`" + command.usage + "`" || "Not provided.")
         .setThumbnail(client.user.displayAvatarURL())
         .setColor("GREEN")
-        .setFooter("Tacobot 1.4.1 Prerelease", client.user.displayAvatarURL());
+        .setFooter("Tacobot 1.4.1", client.user.displayAvatarURL());
 
       return message.channel.send(embed);
     } else {
       const commands = await client.commands;
 
       let emx = new MessageEmbed()
-        .setDescription("Command List")
+        .setDescription("Command list")
         .setColor("GREEN")
-        .setFooter("Tacobot 1.4.1 Prerelease", client.user.displayAvatarURL())
+        .setFooter("Tacobot 1.4.1", client.user.displayAvatarURL())
         .setThumbnail(client.user.displayAvatarURL());
 
       let com = {};
