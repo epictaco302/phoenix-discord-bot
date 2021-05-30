@@ -16,14 +16,14 @@ module.exports = {
     } else {
 
 
-      if (isNaN(args[0])) return message.channel.send(" Invalid user ID!")
+      if (isNaN(args[0])) return message.channel.send(":x: Invalid user ID!")
 
 
-      user = message.mentions.members.first() || await message.guild.members.fetch(args[0]).catch(err => { return message.channel.send(" Unable to find this person!") })
+      user = message.mentions.members.first() || await message.guild.members.fetch(args[0]).catch(err => { return message.channel.send(":x: Unable to find this person!") })
     }
 
     if (!user) {
-      return message.channel.send(" Unable to find this person!")
+      return message.channel.send(":x: Unable to find this person!")
     }
 
     let badges = await user.user.flags
