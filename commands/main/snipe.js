@@ -15,9 +15,9 @@ module.exports = {
   }
     
     const msg = client.snipes.get(message.channel.id)
-    if(!msg) return message.channel.send("There are no deleted messages in this channel!")
+    if(!msg) return message.channel.send(":x: There are no deleted messages in this channel!")
     const embed = new Discord.MessageEmbed()
-    .setAuthor(msg.author)
+    .setAuthor(msg.author, message.author.avatarURL())
     .setDescription(msg.content)
     if(msg.image)embed.setImage(msg.image)
     

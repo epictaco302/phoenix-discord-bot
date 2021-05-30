@@ -10,7 +10,7 @@ module.exports = {
     
     
     if(!message.member.hasPermission("ADMINISTRATOR")) {
-      return message.channel.send("You don't have permission to run this command.")
+      return message.channel.send(":x: You don't have permission to run this command.")
     }
     
     const user = message.mentions.members.first()
@@ -20,11 +20,11 @@ module.exports = {
     }
     
     if(message.mentions.users.first().bot) {
-      return message.channel.send("Bot can't be warned.")
+      return message.channel.send(":x: You can't warn bots, so ***obviously*** you can't reset the warnings of one.")
     }
     
     if(message.author.id === user.id) {
-      return message.channel.send("You can't reset your own warnings.")
+      return message.channel.send(":x: You can't reset your own warnings.")
     }
     
     let warnings = db.get(`warnings_${message.guild.id}_${user.id}`)

@@ -6,6 +6,7 @@ module.exports = {
   aliases: ["whois", "user"],
   usage: "userinfo <MENTION>",
   description: "Returns user info",
+  category: "info",
   run: async (client, message, args) => {
 
     let user;
@@ -18,7 +19,7 @@ module.exports = {
       if (isNaN(args[0])) return message.channel.send(":x: Invalid user ID!")
 
 
-      user = message.mentions.members.first() || await message.guild.members.fetch(args[0]).catch(err => { return message.channel.send(":x: Unable to find this Person") })
+      user = message.mentions.members.first() || await message.guild.members.fetch(args[0]).catch(err => { return message.channel.send(":x: Unable to find this person!") })
     }
 
     if (!user) {
@@ -66,7 +67,6 @@ module.exports = {
         .addField("Account created on", moment(user.user.createdAt).format("LLLL"))
         .addField("Other info", `ID: \`${user.user.id}\`\nDiscriminator: ${user.user.discriminator}\nBot: ${user.user.bot}\nDeleted User: ${user.deleted}`)
         .addField("Badges", newbadges.join(", ").toLowerCase() || "None")
-        .setFooter(`TacoBot, version 1.3.0`)
 
       return message.channel.send(embed).catch(err => {
         return message.channel.send("Error : " + err)

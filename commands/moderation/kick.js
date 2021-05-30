@@ -4,15 +4,15 @@ module.exports = {
   name: "kick",
   category: "moderation",
   description: "Kicks a user from the server",
-  usage: "kick <@user> <raeson>",
+  usage: "kick <@user> <reason>",
   run: (client, message, args) => {
     
     if(!message.member.hasPermission("KICK_MEMBERS")) {
-      return message.channel.send(`**${message.author.username}**, You don't have permission to kick someone.`)
+      return message.channel.send(`:x: **${message.author.username}**, You don't have permission to kick someone.`)
     }
     
     if(!message.guild.me.hasPermission("KICK_MEMBERS")) {
-      return message.channel.send(`**${message.author.username}**, I don't have permission to kick someone.`)
+      return message.channel.send(`:x: **${message.author.username}**, I don't have permission to kick someone.`)
     }
     
     let target = message.mentions.members.first();
@@ -22,11 +22,11 @@ module.exports = {
     }
     
     if(target.id === message.author.id) {
-     return message.channel.send(`**${message.author.username}**, ...You can't kick yourself dingus.`)
+     return message.channel.send(`:x: **${message.author.username}**, ...You can't kick yourself. Wh.. Why'd you even try???`)
     }
     
   if(!args[1]) {
-    return message.channel.send(`**${message.author.username}**, Give a reason to kick this member.`)
+    return message.channel.send(`:x: **${message.author.username}**, You gotta give a reason to kick this member.`)
   }
     
     let embed = new discord.MessageEmbed()
