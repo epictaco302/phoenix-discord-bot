@@ -10,7 +10,7 @@ module.exports = {
       const command = await client.commands.get(args[0]);
 
       if (!command) {
-        return message.channel.send("Unknown Command: " + args[0]);
+        return message.channel.send(args[0] + " is not a valid command!");
       }
 
       let embed = new MessageEmbed()
@@ -18,7 +18,7 @@ module.exports = {
         .addField("Description", command.description || "Not provided :(")
         .setThumbnail(client.user.displayAvatarURL())
         .setColor("GREEN")
-        .setFooter(client.user.username, client.user.displayAvatarURL());
+        .setFooter("Tacobot 1.4.1 Prerelease", client.user.displayAvatarURL());
 
       return message.channel.send(embed);
     } else {
@@ -27,7 +27,7 @@ module.exports = {
       let emx = new MessageEmbed()
         .setDescription("Command List")
         .setColor("GREEN")
-        .setFooter(client.user.username, client.user.displayAvatarURL())
+        .setFooter("Tacobot 1.4.1 Prerelease", client.user.displayAvatarURL())
         .setThumbnail(client.user.displayAvatarURL());
 
       let com = {};
