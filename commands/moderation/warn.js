@@ -9,7 +9,7 @@ module.exports = {
   run: async (client, message, args) => {
     
     if(!message.member.hasPermission("ADMINISTRATOR")) {
-      return message.channel.send("You don't have permission to run this command.")
+      return message.channel.send(":x: You don't have permission to run this command.")
     }
     
     const user = message.mentions.members.first()
@@ -19,15 +19,15 @@ module.exports = {
     }
     
     if(message.mentions.users.first().bot) {
-      return message.channel.send("You can't warn bots.")
+      return message.channel.send(":x: You can't warn bots.")
     }
     
     if(message.author.id === user.id) {
-      return message.channel.send("You can't warn yourself.")
+      return message.channel.send(":x: You can't warn yourself. I don't get why you even tried that anyway...")
     }
     
     if(user.id === message.guild.owner.id) {
-      return message.channel.send("...You obviously can't warn the server owner. Why did you even try?")
+      return message.channel.send(":x: ...You obviously can't warn the server owner. Why did you even try? Do you need brain unsmoothener?")
     }
     
     const reason = args.slice(1).join(" ")
