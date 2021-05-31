@@ -11,7 +11,6 @@ exports.run = async (client, message, args, customisation, tools) => {
       .setColor("#ff9900")
       .setTitle(`No u! *slaps*${message.mentions.users.first().username}`)
       .setImage(body.url)
-      .setFooter(`© Cryptonix X Mod Bot by ${customisation.ownername}`);
       return message.channel.send({embed})
     }else if (message.mentions.users.first().id === client.user.id && message.author.id !== customisation.ownerid){
       return message.channel.send("NUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU **owwie**")
