@@ -1,0 +1,8 @@
+{
+    "settings":{
+        "prefix": "/",
+
+        "channelignorestats": false,
+        "channelignore":"none"
+    }
+}
