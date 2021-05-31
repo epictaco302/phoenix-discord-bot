@@ -1,0 +1,6 @@
+{
+	"ownerid": "USER_ID",
+	"prefix": "tb!",
+	"token": "PUT_TOKEN_HERE",
+	"mongodbURL": "read README.md for instructions"
+}
