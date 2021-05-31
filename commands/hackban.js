@@ -4,7 +4,7 @@ exports.run = (client, message, args, customisation) => {
   let reason = args.slice(1).join(' ');
   let user = args[0];
   if (args[0] === message.author.id) return message.reply('I can\'t let you do that, self-harm is bad!');
-  if (user === client.user.id) return message.reply("Riddle me this" ${message.author.username}", how can you use a bot to ban itself?");
+  if (user === client.user.id) return message.reply("Tell me this, how can you use a bot to ban itself?");
   if (args[0] === customisation.ownerid) return message.reply("I ain't gonna let you ban my developer, lol.");
   if (!user) return message.reply('You need to input a User ID.');
 

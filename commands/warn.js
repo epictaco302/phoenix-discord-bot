@@ -34,7 +34,6 @@ exports.run = async (client, message, args, customisation) => {
   .addField('Warned by:', `${message.author.username}#${message.author.discriminator}`)
   .addField('Number of warnings:', warns[`${user.id}, ${message.guild.id}`].warns)
   .addField('Reason', reason)
-  let logchannel = message.guild.channels.cache.find(x => x.name = 'logs');
   if  (!logchannel){
     message.channel.send({embed})
   }else{

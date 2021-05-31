@@ -4,7 +4,7 @@ exports.run = (client, message, args, customisation) => {
   let user = message.mentions.users.first();
   if (message.mentions.users.size < 1) return message.channel.send('You must mention someone to ban them.').catch(console.error);
   if (message.mentions.users.first().id === message.author.id) return message.channel.send('I can\'t let you do that, self-harm is bad!');
-  if (user.id === client.user.id) return message.channel.send("Riddle me this" ${message.author.username}", how can you use a bot to ban itself?");
+  if (user.id === client.user.id) return message.channel.send("Tell me this, how can you use a bot to ban itself?");
   if (message.mentions.users.first().id === customisation.ownerid) return message.channel.send("I ain't gonna let you ban my developer, lol.");
   if (reason.length < 1) reason = 'No reason given.';
   let botRolePossition = message.guild.member(client.user).roles.highest.position;
