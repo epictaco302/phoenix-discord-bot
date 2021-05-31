@@ -36,7 +36,7 @@ exports.run = async (bot, message, args, customisation) => {
     let question = args.slice(0).join(" ");
 
     let embed = new Discord.MessageEmbed()
-    .setTitle("MAGIC 8 BALL!!!")
+    .setTitle("The Magic 8-ball says...")
     .setColor("#AA9900")
     .addField("Q:", question)
     .addField("A:", replies[result])
